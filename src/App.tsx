@@ -2,7 +2,6 @@ import React from 'react';
 import Navbar from './components/Navbar'
 import {GameField} from './components/GameField'
 
-
 const App: React.FC = () => {
   return (
   <>

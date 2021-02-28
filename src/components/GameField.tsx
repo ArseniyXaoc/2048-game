@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { Field } from './Field';
+import { createStartingCells } from '../logic'
 
 
 // const cells: {x: number, y: number, id: number, value: number }[] = [
@@ -22,8 +23,14 @@ import { Field } from './Field';
 // ];
 
 export const GameField = () => {
-    const [cells, setCells] = useState([]);
+    const [cells, setCells] = useState(createStartingCells());
     return (
-        <Field cells={cells} />
+        <div>
+            <button className="waves-effect waves-light btn" onClick = {() => console.log(cells)}>button</button>
+            <Field cells={cells} />
+        </div>
+            
+
+        
     )
 }

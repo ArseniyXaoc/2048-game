@@ -19,6 +19,8 @@
     font-size: 2rem;
     align-items: center;
     justify-content: center;
+    transition-property: transform;
+    transition: 100ms ease-in-out;
 }
 
 .background-cells {

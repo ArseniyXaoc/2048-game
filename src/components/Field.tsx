@@ -6,7 +6,7 @@ export type FieldProps = {
     cells: {
         x: number,
         y: number,
-        id: number,
+        id: string,
         value: number,
     }[]
 }
@@ -14,16 +14,19 @@ export type FieldProps = {
 type FieldCellsProps = {
     x: number,
     y: number,
-    key: number,
+    key: string | number,
     value: number,
 }
 
 const FieldCells = ({ x, y, value }: FieldCellsProps) => {
     const color = (Math.log2(value) - 1) * 10;
     console.log(color);
+    const coordinateX = (x * 100) ;
+    const coordinateY = (y * 100) ;
     return <div className='field-cells' style={{
-        top: (x * 25) + '%',
-        left: (y * 25) + '%',
+        transform: `translate(${coordinateX}px, ${coordinateY}px)`,
+        //top: (x * 25) + '%',
+        //left: (y * 25) + '%',
         backgroundColor: `hsl(0, ${color}%, 68%)`,
     }}>{value}</div>;
 }
