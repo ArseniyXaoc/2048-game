@@ -20,13 +20,10 @@ type FieldCellsProps = {
 
 const FieldCells = ({ x, y, value }: FieldCellsProps) => {
     const color = (Math.log2(value) - 1) * 10;
-    console.log(color);
     const coordinateX = (x * 100) ;
     const coordinateY = (y * 100) ;
     return <div className='field-cells' style={{
         transform: `translate(${coordinateX}px, ${coordinateY}px)`,
-        //top: (x * 25) + '%',
-        //left: (y * 25) + '%',
         backgroundColor: `hsl(0, ${color}%, 68%)`,
     }}>{value}</div>;
 }

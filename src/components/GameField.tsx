@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Field } from './Field';
 import { createStartingCells } from '../logic'
 
@@ -22,15 +22,29 @@ import { createStartingCells } from '../logic'
 //     { x: 3, y: 3, id: 16, value: 32 },
 // ];
 
-export const GameField = () => {
+export const GameField: React.FC<{scoreReset: Function}> = ({scoreReset}) => {
     const [cells, setCells] = useState(createStartingCells());
+    
+    const handleKeypress = (e: KeyboardEvent) => {
+        console.log(e.code);
+    }
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeypress);
+        return function cleanup() {
+            document.removeEventListener('keydown', handleKeypress);
+        }
+    },[]);
+
+    function newGame() {
+        setCells(createStartingCells());
+        scoreReset();
+    }
+
     return (
         <div>
-            <button className="waves-effect waves-light btn" onClick = {() => console.log(cells)}>button</button>
+            <button className="waves-effect waves-light btn" onClick={newGame}>New Game</button>
             <Field cells={cells} />
         </div>
-            
-
-        
     )
 }

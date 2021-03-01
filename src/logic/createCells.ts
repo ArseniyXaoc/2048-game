@@ -1,10 +1,11 @@
 import { uniqueId, random } from 'lodash'
 
-const createCellsObj = (x: number, y: number, value: number) => ({
+
+export const createCellsObj = (x: number, y: number, value: number) => ({
     x,
     y,
     value,
-    id: uniqueId(),
+    id: 'test'//uniqueId(),
 })
 
 const createStartingCells = () => {
