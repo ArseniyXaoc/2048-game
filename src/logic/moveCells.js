@@ -12,9 +12,30 @@ const moveCells = (InputCells, direction) => {
     }, () => new Array(4).fill(0));
 
     cells.forEach((cell) => {
-        cellMatrix[cell.x][cell.y] = cell;
+        cellMatrix[cell.y][cell.x] = cell;
     })
-    console.log(cellMatrix);
+
+    for (let y = 0; y < 4; y++) {
+        for (let x = 0; x < 4; x++) {
+            if (cellMatrix[y][x] !== 0) {
+                moveMatrix(cellMatrix, x, y);
+            }
+        }
+
+    }
+
+    function moveMatrix(matrix, x, y) {
+        let prevCell = y - 1;
+        console.log(matrix);
+        while (prevCell >= 0) {
+            if(!matrix[prevCell][x]){
+                matrix[prevCell][x] = matrix[y][x];
+                matrix[y][x] = 0;                
+                y -= 1;}
+                prevCell -= 1;
+        }
+        console.log(matrix);
+    }
     return cells;
 };
 export default moveCells
