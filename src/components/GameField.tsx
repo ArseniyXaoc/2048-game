@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Field } from './Field';
-import { createStartingCells } from '../logic'
-
+import { createStartingCells } from '../model';
 
 // const cells: {x: number, y: number, id: number, value: number }[] = [
 //     { x: 0, y: 0, id: 1, value: 2 },
@@ -22,29 +21,29 @@ import { createStartingCells } from '../logic'
 //     { x: 3, y: 3, id: 16, value: 32 },
 // ];
 
-export const GameField: React.FC<{scoreReset: Function}> = ({scoreReset}) => {
-    const [cells, setCells] = useState(createStartingCells());
-    
-    const handleKeypress = (e: KeyboardEvent) => {
-        console.log(e.code);
-    }
+export const GameField: React.FC<{ scoreReset: Function }> = ({ scoreReset }) => {
+  const [cells, setCells] = useState(createStartingCells());
 
-    useEffect(() => {
-        document.addEventListener('keydown', handleKeypress);
-        return function cleanup() {
-            document.removeEventListener('keydown', handleKeypress);
-        }
-    },[]);
+  const handleKeypress = (e: KeyboardEvent) => {
+    console.log(e.code);
+  };
 
-    function newGame() {
-        setCells(createStartingCells());
-        scoreReset();
-    }
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeypress);
+    return function cleanup() {
+      document.removeEventListener('keydown', handleKeypress);
+    };
+  }, []);
 
-    return (
-        <div>
-            <button className="waves-effect waves-light btn" onClick={newGame}>New Game</button>
-            <Field cells={cells} />
-        </div>
-    )
-}
+  function newGame() {
+    setCells(createStartingCells());
+    scoreReset();
+  }
+
+  return (
+    <div>
+      <button className="waves-effect waves-light btn" onClick={newGame}>New Game</button>
+      <Field cells={cells} />
+    </div>
+  );
+};
