@@ -21,12 +21,15 @@ const keyToDirection: any = {
 
 const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, score }) => {
   //@ts-ignore
-  const returnObj = JSON.parse(localStorage.getItem("myCells"))
+  const returnObj = JSON.parse(localStorage.getItem("myCells"));
+  //@ts-ignore
+  const returnScore = JSON.parse(localStorage.getItem("myScore"));
   const [cells, setCells] = useState<cellsType>(createStartingCells());
   if(returnObj){
    console.log(returnObj);
     useEffect(() =>{
     setCells(cells =>[...returnObj]);
+    setScore(returnScore);
   }, [])}
   
   
@@ -73,8 +76,8 @@ const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, 
   function saveGame(cells: cellsType, score: number){
     let serialObjCell = JSON.stringify(cells);
     localStorage.setItem("myCells", serialObjCell);
-    let serialObjScore = JSON.stringify(cells);
-    localStorage.setItem("myCells", serialObjScore);
+    let serialObjScore = JSON.stringify(score);
+    localStorage.setItem("myScore", serialObjScore);
     
     console.log(returnObj);
   }
