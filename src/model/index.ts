@@ -1,2 +1,2 @@
-export { default as createStartingCells } from './createCells';
-export { default as moveCells } from './moveCells';
+export { createStartingCells } from './createCells';
+export { moveCells } from './moveCells';

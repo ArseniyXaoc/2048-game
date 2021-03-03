@@ -6,7 +6,7 @@ export type FieldProps = {
   cells: {
     x: number,
     y: number,
-    id: string,
+    id: string | number,
     value: number,
   }[]
 };

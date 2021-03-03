@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
 import { createCellsObj } from '../createCells';
 import moveCells from '../moveCells';
-import { DIRECTION } from '../../components/constants/AppConsatnts';
+import DIRECTION from '../../constants/AppConsatnts';
 
 it('move ', () => {
-  const initCells = [createCellsObj(1, 3, 2, 'key')];
-  expect(moveCells(initCells, DIRECTION.UP)).toEqual(
+  const initCells = [createCellsObj(0, 0, 2, 'key')];
+  expect(moveCells(initCells, DIRECTION.DOWN)).toEqual(
     [
       {
-        x: 1, y: 0, value: 2, id: 'key',
+        x: 0, y: 3, value: 2, id: 'key',
       },
     ],
   );

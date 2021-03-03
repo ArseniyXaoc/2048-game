@@ -1,32 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Field } from './Field';
 import { createStartingCells } from '../model';
+import { moveCells } from '../model/moveCells';
+import { DIRECTION } from './constants/AppConsatnts';
+import { removeEnlargeCell } from '../model/removeEnlargeCell';
+import { addFieldCell } from '../model/addFieldCell'
 
-// const cells: {x: number, y: number, id: number, value: number }[] = [
-//     { x: 0, y: 0, id: 1, value: 2 },
-//     { x: 1, y: 0, id: 2, value: 4 },
-//     { x: 2, y: 0, id: 3, value: 8 },
-//     { x: 3, y: 0, id: 4, value: 16 },
-//     { x: 0, y: 1, id: 5, value: 32 },
-//     { x: 1, y: 1, id: 6, value: 64 },
-//     { x: 2, y: 1, id: 7, value: 128 },
-//     { x: 3, y: 1, id: 8, value: 256 },
-//     { x: 0, y: 2, id: 9, value: 512 },
-//     { x: 1, y: 2, id: 10, value: 1024 },
-//     { x: 2, y: 2, id: 11, value: 2048 },
-//     { x: 3, y: 2, id: 12, value: 2 },
-//     { x: 0, y: 3, id: 13, value: 4 },
-//     { x: 1, y: 3, id: 14, value: 8 },
-//     { x: 2, y: 3, id: 15, value: 16 },
-//     { x: 3, y: 3, id: 16, value: 32 },
-// ];
+const keyToDirection: any = {
+  ArrowLeft: DIRECTION.LEFT,
+  ArrowRight: DIRECTION.RIGHT,
+  ArrowUp: DIRECTION.UP,
+  ArrowDown: DIRECTION.DOWN,
+  KeyA: DIRECTION.LEFT,
+  KeyD: DIRECTION.RIGHT,
+  KeyW: DIRECTION.UP,
+  KeyS: DIRECTION.DOWN,
+}
 
-export const GameField: React.FC<{ scoreReset: Function }> = ({ scoreReset }) => {
+const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, score }) => {
   const [cells, setCells] = useState(createStartingCells());
-
-  const handleKeypress = (e: KeyboardEvent) => {
-    console.log(e.code);
-  };
+  const [autoplay, setPlay] = useState('Start');
+  const [right, setRight] = useState();
+  const [down, setDown] = useState();
+  const handleKeypress = (e: KeyboardEvent) => { upgradeCells(e, ''); };
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeypress);
@@ -35,15 +31,46 @@ export const GameField: React.FC<{ scoreReset: Function }> = ({ scoreReset }) =>
     };
   }, []);
 
+  function autoPlay(state: string) { 
+    if (state === 'Start') {
+      //@ts-ignore
+      setRight(right => setInterval(() => {
+        upgradeCells(null, DIRECTION.RIGHT)
+      }, 500))
+      //@ts-ignore
+      setDown(down => setInterval(() => {
+        upgradeCells(null, DIRECTION.RIGHT)
+      }, 500))
+      setInterval(() => {
+        upgradeCells(null, DIRECTION.DOWN)
+      }, 500);
+    } else {
+      //@ts-ignore
+      setPlay('Start');
+    }
+    setPlay('Stop');
+  }
+
+  function upgradeCells(event: KeyboardEvent | null, direction: string) {
+    setCells(cells => event ? moveCells(cells, keyToDirection[event.code]) : moveCells(cells, direction));
+    setCells(cells => removeEnlargeCell(cells));
+    setCells(cells => addFieldCell(cells));
+    //@ts-ignore
+    setScore(score => score + 2);
+  }
+
   function newGame() {
-    setCells(createStartingCells());
-    scoreReset();
+    setCells(cells => createStartingCells());
+    setScore(0);
   }
 
   return (
     <div>
       <button className="waves-effect waves-light btn" onClick={newGame}>New Game</button>
+      <button className="waves-effect waves-light btn" onClick={() => autoPlay(autoplay)}>Autoplay {autoplay}</button>
       <Field cells={cells} />
     </div>
   );
 };
+
+export default GameField;

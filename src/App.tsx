@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
-import { GameField } from './components/GameField';
+import GameField from './components/GameField';
 
 const App: React.FC = () => {
   const [score, setScore] = useState(1);
