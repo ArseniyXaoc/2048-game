@@ -5,7 +5,7 @@ import GameField from './components/GameField';
 const App: React.FC = () => {
   const [score, setScore] = useState(1);
   function resetScore() {
-    setScore(0);
+    setScore(score+2);
   }
 
   return (
@@ -14,7 +14,7 @@ const App: React.FC = () => {
       <div className="containet">
         <h1>Test</h1>
       </div>
-      <GameField scoreReset={resetScore} />
+      <GameField setScore={setScore} score={score} />
     </>
   );
 };

@@ -45,7 +45,9 @@ const moveCells = (InputCells: cellsType, direction: string):cellsType => {
         matrix[y][x].cellState = CELLSTATE.MOVING;
         matrix[y][x] = 0;
         y = prevCell;
-      } else if (matrix[prevCell][x].value === matrix[y][x].value){
+      } else if (matrix[prevCell][x].value === matrix[y][x].value && 
+        (matrix[prevCell][x].cellState === CELLSTATE.IDLE || 
+          matrix[prevCell][x].cellState === CELLSTATE.MOVING)){
         matrix[prevCell][x].cellState = CELLSTATE.REMOVE;
         matrix[y][x].cellState = CELLSTATE.ENLARGE;
         matrix[prevCell][x] = matrix[y][x];

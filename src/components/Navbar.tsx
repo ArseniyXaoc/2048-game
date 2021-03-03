@@ -11,8 +11,8 @@ const Navbar: React.FC<{ score: number }> = ({ score }) =>
           <span>{score}</span>
         </p>
         <ul className="right hide-on-med-and-down">
-          <li><a href="/">First</a></li>
-          <li><a href="/">Second</a></li>
+          <li><a href="">First</a></li>
+          <li><a href="">Second</a></li>
         </ul>
       </div>
     </nav>
