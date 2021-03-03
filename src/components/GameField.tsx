@@ -20,8 +20,16 @@ const keyToDirection: any = {
 }
 
 const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, score }) => {
-
-  const [cells, setCells] = useState(createStartingCells());
+  //@ts-ignore
+  const returnObj = JSON.parse(localStorage.getItem("myCells"))
+  const [cells, setCells] = useState<cellsType>(createStartingCells());
+  if(returnObj){
+   console.log(returnObj);
+    useEffect(() =>{
+    setCells(cells =>[...returnObj]);
+  }, [])}
+  
+  
   const [autoplay, setPlay] = useState('Start');
   const [interval, setInt] = useState();
   const handleKeypress = (e: KeyboardEvent) => { upgradeCells(e, ''); };
@@ -67,8 +75,7 @@ const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, 
     localStorage.setItem("myCells", serialObjCell);
     let serialObjScore = JSON.stringify(cells);
     localStorage.setItem("myCells", serialObjScore);
-    //@ts-ignore
-    var returnObj = JSON.parse(localStorage.getItem("myCells"))
+    
     console.log(returnObj);
   }
 
