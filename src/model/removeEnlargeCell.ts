@@ -5,7 +5,9 @@ export function removeEnlargeCell(cells: cellsType) {
         .map(cell => {
         if(cell.cellState === CELLSTATE.ENLARGE){
             cell.value *= 2;
-            console.log(cell);
+            if(cell.value === 2048){
+                alert('You Win!');
+            }
         }
         cell.cellState = CELLSTATE.IDLE;
         return cell;

@@ -20,6 +20,8 @@ export function addFieldCell(cells:cellsType) {
         const sum = x * 4 + y;
         newCoord.add(sum);
     } while (startSize === newCoord.size);
+    const r = random(0, 9)
 
-    return ([...cells,createCellsObj(x, y, 2, uniqueId(), 'IDLE')]);
+
+    return ([...cells,r <= 7 ? createCellsObj(x, y, 2, uniqueId(), 'IDLE') : createCellsObj(x, y, 4, uniqueId(), 'IDLE')]);
 }

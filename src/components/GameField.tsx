@@ -5,6 +5,8 @@ import { moveCells } from '../model/moveCells';
 import { DIRECTION } from './constants/AppConsatnts';
 import { removeEnlargeCell } from '../model/removeEnlargeCell';
 import { addFieldCell } from '../model/addFieldCell'
+import { cellsType } from '../model/moveCells'
+import useSound from 'use-sound';
 
 const keyToDirection: any = {
   ArrowLeft: DIRECTION.LEFT,
@@ -18,10 +20,10 @@ const keyToDirection: any = {
 }
 
 const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, score }) => {
+
   const [cells, setCells] = useState(createStartingCells());
   const [autoplay, setPlay] = useState('Start');
-  const [right, setRight] = useState();
-  const [down, setDown] = useState();
+  const [interval, setInt] = useState();
   const handleKeypress = (e: KeyboardEvent) => { upgradeCells(e, ''); };
 
   useEffect(() => {
@@ -31,24 +33,21 @@ const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, 
     };
   }, []);
 
-  function autoPlay(state: string) { 
+  function autoPlay(state: string) {
+    let right;
+    let down;
     if (state === 'Start') {
-      //@ts-ignore
-      setRight(right => setInterval(() => {
+      right = setInterval(() => {
         upgradeCells(null, DIRECTION.RIGHT)
-      }, 500))
-      //@ts-ignore
-      setDown(down => setInterval(() => {
-        upgradeCells(null, DIRECTION.RIGHT)
-      }, 500))
-      setInterval(() => {
+      }, 500);
+      down = setInterval(() => {
         upgradeCells(null, DIRECTION.DOWN)
       }, 500);
     } else {
-      //@ts-ignore
-      setPlay('Start');
+      clearInterval(right);
+      clearInterval(down);
     }
-    setPlay('Stop');
+
   }
 
   function upgradeCells(event: KeyboardEvent | null, direction: string) {
@@ -59,6 +58,20 @@ const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, 
     setScore(score => score + 2);
   }
 
+  useEffect(() => {
+    saveGame(cells, score);
+  })
+
+  function saveGame(cells: cellsType, score: number){
+    let serialObjCell = JSON.stringify(cells);
+    localStorage.setItem("myCells", serialObjCell);
+    let serialObjScore = JSON.stringify(cells);
+    localStorage.setItem("myCells", serialObjScore);
+    //@ts-ignore
+    var returnObj = JSON.parse(localStorage.getItem("myCells"))
+    console.log(returnObj);
+  }
+
   function newGame() {
     setCells(cells => createStartingCells());
     setScore(0);
@@ -67,7 +80,19 @@ const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, 
   return (
     <div>
       <button className="waves-effect waves-light btn" onClick={newGame}>New Game</button>
-      <button className="waves-effect waves-light btn" onClick={() => autoPlay(autoplay)}>Autoplay {autoplay}</button>
+      <button className="waves-effect waves-light btn" onClick={() => {
+        let x;
+        if (autoplay === 'Start') {
+          setPlay('Stop')
+          //@ts-ignore
+        } else {
+          setPlay('Stop')
+          console.log(x);
+          clearInterval();
+        }
+        autoPlay(autoplay);
+
+      }}>Autoplay {autoplay}</button>
       <Field cells={cells} />
     </div>
   );

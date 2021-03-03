@@ -5,6 +5,7 @@ import {
 import { rotate } from '2d-array-rotation';
 import { CELLSTATE } from '../components/constants/AppConsatnts'
 
+
 export type cellsType = {
   x: number, 
   y: number, 
@@ -14,6 +15,8 @@ export type cellsType = {
 }[];
 
 const moveCells = (InputCells: cellsType, direction: string):cellsType => {
+ 
+
   const cells = cloneDeep(InputCells);
   let cellMatrix: any = Array.from({ length: 4 }, () => new Array(4).fill(0));
   cells.forEach((cell) => { cellMatrix[cell.y][cell.x] = cell; });
