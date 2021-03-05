@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Field } from './Field';
 import { createStartingCells } from '../model';
 import { moveCells } from '../model/moveCells';
 import { DIRECTION } from './constants/AppConsatnts';
 import { removeEnlargeCell } from '../model/removeEnlargeCell';
-import { addFieldCell } from '../model/addFieldCell'
-import { cellsType } from '../model/moveCells'
-import useSound from 'use-sound';
+import { addFieldCell } from '../model/addFieldCell';
+import { cellsType } from '../model/moveCells';
+import { useInterval } from '../model/hooks/useInterval';
+ //@ts-ignore
+import url1 from '../assets/sound/267950__anagar__whoosh.wav';
 
 const keyToDirection: any = {
   ArrowLeft: DIRECTION.LEFT,
@@ -20,20 +22,21 @@ const keyToDirection: any = {
 }
 
 const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, score }) => {
+  const [statistic, setStatistic] = useState<[]>([]);
   //@ts-ignore
   const returnObj = JSON.parse(localStorage.getItem("myCells"));
   //@ts-ignore
   const returnScore = JSON.parse(localStorage.getItem("myScore"));
   const [cells, setCells] = useState<cellsType>(createStartingCells());
-  if(returnObj){
-   console.log(returnObj);
-    useEffect(() =>{
-    setCells(cells =>[...returnObj]);
-    setScore(returnScore);
-  }, [])}
-  
-  
-  const [autoplay, setPlay] = useState('Start');
+  if (returnObj) {
+    useEffect(() => {
+      setCells(cells => [...returnObj]);
+      setScore(returnScore);
+    }, [])
+  }
+
+
+  const [isRunning, setPlay] = useState(false);
   const [interval, setInt] = useState();
   const handleKeypress = (e: KeyboardEvent) => { upgradeCells(e, ''); };
 
@@ -44,65 +47,53 @@ const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, 
     };
   }, []);
 
-  function autoPlay(state: string) {
-    let right;
-    let down;
-    if (state === 'Start') {
-      right = setInterval(() => {
-        upgradeCells(null, DIRECTION.RIGHT)
-      }, 500);
-      down = setInterval(() => {
-        upgradeCells(null, DIRECTION.DOWN)
-      }, 500);
-    } else {
-      clearInterval(right);
-      clearInterval(down);
-    }
-
+  function autoPlay() {
+       upgradeCells(null, DIRECTION.RIGHT);
+       upgradeCells(null, DIRECTION.DOWN);
+       upgradeCells(null, DIRECTION.DOWN);
   }
 
   function upgradeCells(event: KeyboardEvent | null, direction: string) {
     setCells(cells => event ? moveCells(cells, keyToDirection[event.code]) : moveCells(cells, direction));
-    setCells(cells => removeEnlargeCell(cells));
-    setCells(cells => addFieldCell(cells));
+    setCells(cells => removeEnlargeCell(cells, score, setScore));
+    setCells(cells => addFieldCell(cells, newGame, useStatistic, score));  
+  } 
+
+  function useStatistic (){
+    const date = new Date;
     //@ts-ignore
-    setScore(score => score + 2);
+    setStatistic(statistic => statistic.push({date,score}));
+    let serialObjStat = JSON.stringify(statistic);
+    localStorage.setItem("myStat", serialObjStat);
   }
 
   useEffect(() => {
     saveGame(cells, score);
+    function saveGame(cells: cellsType, score: number) {
+      let serialObjCell = JSON.stringify(cells);
+      localStorage.setItem("myCells", serialObjCell);
+      let serialObjScore = JSON.stringify(score);
+      localStorage.setItem("myScore", serialObjScore);
+    }
   })
 
-  function saveGame(cells: cellsType, score: number){
-    let serialObjCell = JSON.stringify(cells);
-    localStorage.setItem("myCells", serialObjCell);
-    let serialObjScore = JSON.stringify(score);
-    localStorage.setItem("myScore", serialObjScore);
-    
-    console.log(returnObj);
-  }
-
   function newGame() {
-    setCells(cells => createStartingCells());
+    setPlay(false);
+    setCells(cells => createStartingCells());   
+    const x = JSON.stringify(cells);;
+    localStorage.setItem("myCells", x); 
     setScore(0);
   }
 
+  const delay = 500;
+  useInterval(() => {
+    autoPlay();
+  }, isRunning ? delay : null);
+
   return (
     <div>
-      <button className="waves-effect waves-light btn" onClick={newGame}>New Game</button>
-      <button className="waves-effect waves-light btn" onClick={() => {
-        let x;
-        if (autoplay === 'Start') {
-          setPlay('Stop')
-          //@ts-ignore
-        } else {
-          setPlay('Stop')
-          console.log(x);
-          clearInterval();
-        }
-        autoPlay(autoplay);
-
-      }}>Autoplay {autoplay}</button>
+      <button className="waves-effect waves-light btn" onClick={ newGame }>New Game</button>
+      <button className="waves-effect waves-light btn" onClick={() => isRunning ? setPlay(false) : setPlay(true)}>Autoplay {isRunning ? 'Stop' : 'Start' }</button>
       <Field cells={cells} />
     </div>
   );
