@@ -5,7 +5,6 @@ import { uniqueId, random } from 'lodash';
 import { rotate } from '2d-array-rotation';
 
 export function addFieldCell(cells: cellsType, newGame: Function, statistic: Function, score: number) {
-    console.log(score);
     const newCoord = new Set();
 
     cells.forEach(cell => {
@@ -13,8 +12,8 @@ export function addFieldCell(cells: cellsType, newGame: Function, statistic: Fun
     })
 
     if (newCoord.size === 16) {
-        let end1 = 12
-        let end2 = 12
+        let posibleTurnHorizontal = 12
+        let posibleTurnVertical = 12
         let cellMatrix: any = Array.from({ length: 4 }, () => new Array(4).fill(0));
         cells.forEach((cell) => { cellMatrix[cell.y][cell.x] = cell; });
         // @ts-ignore    
@@ -22,7 +21,7 @@ export function addFieldCell(cells: cellsType, newGame: Function, statistic: Fun
             //@ts-ignore 
             for (let i = 0; i < 3; i++) {
                 if (item[i].value !== item[i + 1].value) {
-                    end1 -= 1;
+                    posibleTurnHorizontal -= 1;
                 }
             }
         });
@@ -33,16 +32,16 @@ export function addFieldCell(cells: cellsType, newGame: Function, statistic: Fun
             //@ts-ignore 
             for (let i = 0; i < 3; i++) {
                 if (item[i].value !== item[i + 1].value) {
-                    end2 -= 1;
+                    posibleTurnVertical -= 1;
                 }
             }
         });
-        if(end2 ===0 && end1 === 0) {
-           alert('you looze'); 
-           statistic();
-           newGame();
-           return [];
-        }    
+        if (!posibleTurnVertical && !posibleTurnHorizontal) {
+            alert('you looze');
+            statistic();
+            newGame();
+            return [];
+        }
         return cells
     };
 

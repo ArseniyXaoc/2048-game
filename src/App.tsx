@@ -14,7 +14,6 @@ const App: React.FC = () => {
       <header><Navbar score={score} /></header>
       <main>        
         <div className="container">
-          <h1></h1>
         </div>
         <GameField setScore={setScore} score={score} />
         

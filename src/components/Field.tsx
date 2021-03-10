@@ -1,4 +1,3 @@
-import { type } from 'os';
 import React from 'react';
 import './field.css';
 
@@ -20,8 +19,7 @@ type FieldCellsProps = {
 
 const FieldCells = ({ x, y, value }: FieldCellsProps) => {
   const color = (Math.log2(value) - 1) * 10;
-  const coordinateX = (x * 100);
-  const coordinateY = (y * 100);
+  const [coordinateX, coordinateY] = [x, y].map(coor => coor * 100);
   return (
     <div
       className="field-cells"

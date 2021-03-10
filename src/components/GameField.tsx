@@ -10,7 +10,21 @@ import { useInterval } from '../model/hooks/useInterval';
  //@ts-ignore
 import url1 from '../assets/sound/267950__anagar__whoosh.wav';
 
-const keyToDirection: any = {
+enum Arrows {
+  ArrowLeft = 'ArrowLeft',
+  ArrowRight = 'ArrowRight',
+  ArrowUp = 'ArrowUp',
+  ArrowDown = 'ArrowDown',
+  KeyA = 'KeyA',
+  KeyD = 'KeyD',
+  KeyW = 'KeyW',
+  KeyS = 'KeyS',
+}
+
+type KeyToDirection = {
+ [key in Arrows]: DIRECTION
+}
+const keyToDirection: KeyToDirection = {
   ArrowLeft: DIRECTION.LEFT,
   ArrowRight: DIRECTION.RIGHT,
   ArrowUp: DIRECTION.UP,
@@ -53,10 +67,16 @@ const GameField: React.FC<{ setScore: Function, score: number }> = ({ setScore, 
        upgradeCells(null, DIRECTION.DOWN);
   }
 
+  
+
   function upgradeCells(event: KeyboardEvent | null, direction: string) {
-    setCells(cells => event ? moveCells(cells, keyToDirection[event.code]) : moveCells(cells, direction));
-    setCells(cells => removeEnlargeCell(cells, score, setScore));
-    setCells(cells => addFieldCell(cells, newGame, useStatistic, score));  
+    setCells(cells => {
+      //@ts-ignore
+      let newCell = event ? moveCells(cells, keyToDirection[event.code]) : moveCells(cells, direction);
+      newCell = removeEnlargeCell(newCell, score, setScore);
+      return newCell;
+    });
+    setCells(cells => addFieldCell(cells, newGame, useStatistic, score));
   } 
 
   function useStatistic (){

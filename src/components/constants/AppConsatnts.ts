@@ -1,9 +1,9 @@
-export const DIRECTION = {
-    UP: 'UP',
-    DOWN: 'DOWN',
-    LEFT: 'LEFT',
-    RIGHT: 'RIGHT',
-}
+export enum DIRECTION  {
+    UP ='UP',
+    DOWN =  'DOWN',
+    LEFT = 'LEFT',
+    RIGHT = 'RIGHT',
+  }
 
 export const CELLSTATE = {
     IDLE: 'IDLE', 

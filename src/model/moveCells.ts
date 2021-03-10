@@ -23,39 +23,40 @@ const moveCells = (InputCells: cellsType, direction: string):cellsType => {
   let rotated = false;
 
   const rotateTo = (rotattion: string, matrix: cellsType) => {
+    let newMatrix;
     switch (rotattion) {
       case 'DOWN':
-        matrix = rotate(matrix, 180);
+        newMatrix = rotate(matrix, 180);
         break;
       case 'RIGHT':
-        matrix = rotated ? rotate(matrix, 90) : rotate(matrix, -90);
+        newMatrix = rotated ? rotate(matrix, 90) : rotate(matrix, -90);
         break;
       case 'LEFT':
-        matrix = rotated ? rotate(matrix, -90) : rotate(matrix, 90);
+        newMatrix = rotated ? rotate(matrix, -90) : rotate(matrix, 90);
         break;
       default:
         break;
     }
     rotated = true;
-    return matrix;
+    return newMatrix;
   };
 
   function moveMatrix(matrix: any, x: number , y: number) {
     let prevCell = y - 1;
+    let currentCell = y;
     while (prevCell >= 0) {
       if (!matrix[prevCell][x]) {
-        matrix[prevCell][x] = matrix[y][x];
-        matrix[y][x].cellState = CELLSTATE.MOVING;
-        matrix[y][x] = 0;
-        y = prevCell;
-      } else if (matrix[prevCell][x].value === matrix[y][x].value && 
-        (matrix[prevCell][x].cellState === CELLSTATE.IDLE || 
-          matrix[prevCell][x].cellState === CELLSTATE.MOVING)){
+        matrix[prevCell][x] = matrix[currentCell][x];
+        matrix[currentCell][x].cellState = CELLSTATE.MOVING;
+        matrix[currentCell][x] = 0;
+        currentCell = prevCell;
+      } else if (matrix[prevCell][x].value === matrix[currentCell][x].value && 
+        (matrix[prevCell][x].cellState === CELLSTATE.IDLE || CELLSTATE.MOVING)){
         matrix[prevCell][x].cellState = CELLSTATE.REMOVE;
-        matrix[y][x].cellState = CELLSTATE.ENLARGE;
-        matrix[prevCell][x] = matrix[y][x];
-        matrix[y][x] = 0;
-        y = prevCell;
+        matrix[currentCell][x].cellState = CELLSTATE.ENLARGE;
+        matrix[prevCell][x] = matrix[currentCell][x];
+        matrix[currentCell][x] = 0;
+        currentCell = prevCell;
       }
       else break;
       prevCell -= 1;

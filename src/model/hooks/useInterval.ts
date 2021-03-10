@@ -11,7 +11,7 @@ export function useInterval(callback: any, delay: any) {
         savedCallback.current();
       }
       if ((delay !== null)) {
-        let id = setInterval(tick, delay);
+        let id: NodeJS.Timeout = setInterval(tick, delay);
         return () => clearInterval(id);
       }
     }, [delay]);
