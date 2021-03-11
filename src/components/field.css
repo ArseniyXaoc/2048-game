@@ -1,0 +1,36 @@
+.field {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    background-color:rgb(78, 76, 76);
+    border-radius: 5%;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.field-cells {
+    width: 90px;
+    margin: 5px;
+    height: 90px;
+    position: absolute;
+    border-radius: 24%;
+    display: flex;
+    font-size: 2rem;
+    align-items: center;
+    justify-content: center;
+    transition-property: transform;
+    transition: 100ms ease-in-out;
+}
+
+.background-cells {
+    margin: 5px;
+    width: 90px;
+    height: 90px;
+    border-radius: 24%;
+    display: flex;
+    background-color: rgba(206, 169, 169, 0.466);
+    font-size: 2rem;
+    align-items: center;
+    justify-content: center;
+}
